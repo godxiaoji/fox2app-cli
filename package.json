@@ -1,0 +1,48 @@
+{
+  "_from": "fox2app",
+  "_id": "fox2app@0.0.2",
+  "_inBundle": false,
+  "_integrity": "sha512-oQ3QVhkeQxHh9vtWxwiA2d1Rw0O0fSdmOb8MXLhGM4OHGprXsC1CQJjd2a+ShwwF4jeWvHcjukgdj1XMv7WTBw==",
+  "_location": "/fox2app",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "fox2app",
+    "name": "fox2app",
+    "escapedName": "fox2app",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/fox2app/-/fox2app-0.0.1.tgz",
+  "_shasum": "92cfe01c9a7c78afdd6b24dc60511dc9e4434ef7",
+  "_spec": "fox2app",
+  "_where": "D:\\dev",
+  "author": "",
+  "bundleDependencies": false,
+  "deprecated": false,
+  "description": "",
+  "license": "MIT",
+  "devDependencies": {
+    "copy-webpack-plugin": "^6.0.3",
+    "css-loader": "^4.2.1",
+    "html-webpack-plugin": "^4.3.0",
+    "mini-css-extract-plugin": "^0.10.0",
+    "optimize-css-assets-webpack-plugin": "^5.0.3",
+    "vue-loader": "^15.9.3",
+    "vue-template-compiler": "^2.6.12",
+    "webpack": "^4.44.1",
+    "webpack-cli": "^3.3.12"
+  },
+  "main": "index.js",
+  "name": "fox2app",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "version": "0.0.1"
+}
