@@ -9,7 +9,7 @@ const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 // const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 
 const cmdPath = './'
-const tempPath = 'dist/cache'
+const tempPath = path.resolve(__dirname, './cache')
 let appData = fs.readFileSync(path.resolve(cmdPath, './src/app.json'))
 appData = JSON.parse(appData)
 
@@ -17,11 +17,11 @@ const entries = () => {
   const ret = {}
 
   appData.pages.forEach(v => {
-    ret[v] = `./${tempPath}/${v}.js`
+    ret[v] = path.resolve(tempPath, `./${v}.js`)
   })
 
-  ret['app-service'] = `./${tempPath}/app-service.js`
-  ret['config-service'] = `./${tempPath}/config-service.js`
+  ret['app-service'] = path.resolve(tempPath, './app-service.js')
+  ret['config-service'] = path.resolve(tempPath, './config-service.js')
 
   return ret
 }

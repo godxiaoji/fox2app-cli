@@ -77,20 +77,9 @@ class AppPlugin {
 
   createTempFiles() {
     // 创建临时处理目录
-    let pathArr = this.tempPath.split('/')
-    let tempPath = this.basePath
-
-    while (pathArr.length > 0) {
-      tempPath = tempPath + '/' + pathArr.shift()
-
-      if (!fs.existsSync(tempPath)) {
-        fs.mkdirSync(tempPath)
-        console.log('A  ' + tempPath)
-      }
-
-      if (pathArr.length <= 0) {
-        break
-      }
+    if (!fs.existsSync(this.tempPath)) {
+      fs.mkdirSync(this.tempPath)
+      console.log('A  ' + this.tempPath)
     }
 
     // 服务层
@@ -103,7 +92,10 @@ class AppPlugin {
     __$.serviceLoad({ pageCtx, compCtx, appOptions })`
     )
 
-    this.writeFile('config-service', 'js', `const pageCtx = require.context('../../src/pages', true, /\\.json$/)
+    this.writeFile(
+      'config-service',
+      'js',
+      `const pageCtx = require.context('../../src/pages', true, /\\.json$/)
     import appJson from '../../src/app.json'
 
     export function getPageCtx() {
@@ -116,7 +108,8 @@ class AppPlugin {
 
     window.__$ = window.__$ || {}
     window.__$.getPageCtx = getPageCtx
-    window.__$.getAppJson = getAppJson`)
+    window.__$.getAppJson = getAppJson`
+    )
 
     const pageRequireComponents = []
 
@@ -290,7 +283,7 @@ class AppPlugin {
     const fileName = pagePaths.pop()
 
     // 轮询创建文件
-    let _dir = `${this.basePath}/${this.tempPath}`
+    let _dir = this.tempPath
     for (let i = 0; i < pagePaths.length; i++) {
       _dir = _dir + '/' + pagePaths[i]
 
@@ -326,10 +319,7 @@ class AppPlugin {
   loadFileContent(filePath, ext) {
     if (ext === 'json') {
       const ret = fs.existsSync(filePath)
-        ? fs
-          .readFileSync(filePath)
-          .toString()
-          .trim()
+        ? fs.readFileSync(filePath).toString().trim()
         : '{}'
 
       try {
@@ -340,10 +330,7 @@ class AppPlugin {
     }
 
     return fs.existsSync(filePath)
-      ? fs
-        .readFileSync(filePath)
-        .toString()
-        .trim()
+      ? fs.readFileSync(filePath).toString().trim()
       : ''
   }
 }
