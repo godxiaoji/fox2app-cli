@@ -1,3 +1,3 @@
-const appConfig = require('./app.config')
+const getConfig = require('./app.config')
 
-module.exports = { appConfig }
+module.exports = { getConfig }

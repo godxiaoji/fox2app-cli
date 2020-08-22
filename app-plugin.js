@@ -17,10 +17,10 @@ function kebabCase2CamelCase(name) {
 class AppPlugin {
   constructor(options) {
     // 根据 options 配置你的插件
-    this.basePath = options.path
-    this.sourcePath = this.basePath + '/' + options.src
+    this.sourcePath = path.resolve(options.src)
     this.pages = options.pages
     this.tempPath = options.tempPath
+    this.mode = options.mode
   }
 
   apply(compiler) {
@@ -39,16 +39,18 @@ class AppPlugin {
         manifest[name] = compilation.assets[name].size()
         // 将生成文件的文件名和大小写入manifest对象
 
-        if (name === 'app-service.js') {
-          const newOutput = `(function(window,document,history,localStorage,location,parent,frames,frameElement){var __logicData={};${compilation.assets[
-            name
-          ].source()}})()`
-          compilation.assets[name] = {
-            source() {
-              return newOutput
-            },
-            size() {
-              return this.source().length
+        if (this.mode === 'production') {
+          if (name === 'app-service.js') {
+            const newOutput = `(function(window,document,history,localStorage,location,parent,frames,frameElement){var __logicData={};${compilation.assets[
+              name
+            ].source()}})()`
+            compilation.assets[name] = {
+              source() {
+                return newOutput
+              },
+              size() {
+                return this.source().length
+              }
             }
           }
         }
@@ -66,10 +68,10 @@ class AppPlugin {
 
     compiler.hooks.afterEmit.tapAsync('AppPlugin', (compilation, callback) => {
       // console.log(process.env.NODE_ENV)
-      // if (process.env.NODE_ENV === 'production') {
-      //   // 删除临时文件
-      //   this.deleteFolderRecursive(`${this.basePath}/${this.tempPath}`)
-      // }
+      if (this.mode === 'production') {
+        // 删除临时文件
+        this.deleteFolderRecursive(this.tempPath)
+      }
 
       callback()
     })
@@ -121,7 +123,7 @@ class AppPlugin {
         'js',
         'json'
       ].map(ext => {
-        const filePath = `${this.sourcePath}/${page}.${ext}`
+        const filePath = path.resolve(this.sourcePath, `${page}.${ext}`)
 
         return this.loadFileContent(filePath, ext)
       })
@@ -165,13 +167,13 @@ class AppPlugin {
     }
 
     const allRequireComponents = []
-    const addComponentPath = path => {
-      if (allRequireComponents.indexOf(path) === -1) {
-        allRequireComponents.push(path)
+    const addComponentPath = compPath => {
+      if (allRequireComponents.indexOf(compPath) === -1) {
+        allRequireComponents.push(compPath)
       }
 
       const jsonCont = this.loadFileContent(
-        `${this.sourcePath}/${path}.json`,
+        path.resolve(this.sourcePath, `${compPath}.json`),
         'json'
       )
 
@@ -194,7 +196,7 @@ class AppPlugin {
         'js',
         'json'
       ].map(ext => {
-        const filePath = `${this.sourcePath}/${compPath}.${ext}`
+        const filePath = path.resolve(this.sourcePath, `${compPath}.${ext}`)
 
         return this.loadFileContent(filePath, ext)
       })

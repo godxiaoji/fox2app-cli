@@ -31,7 +31,7 @@ const output = {
   filename: '[name].js'
 }
 
-const getPlugins = () => {
+const getPlugins = (mode) => {
   const ret = []
 
   // 业务页面
@@ -89,8 +89,8 @@ const getPlugins = () => {
     new AppPlugin({
       src: 'src',
       pages: appData.pages,
-      path: cmdPath,
-      tempPath
+      tempPath,
+      mode
     })
   )
 
@@ -141,43 +141,45 @@ const getPlugins = () => {
   return ret
 }
 
-module.exports = {
-  mode: 'development',
-  // devtool: 'source-map',
-  resolve: {
-    alias: {
-      '@': path.resolve(cmdPath, './src')
-    }
-  },
-  module: {
-    rules: [
-      {
-        test: /\.vue$/,
-        exclude: /node_modules/,
-        use: ['vue-loader']
-      },
-      {
-        test: /\.css$/,
-        exclude: /node_modules/,
-        use: [
-          {
-            loader: MiniCssExtractPlugin.loader,
-            options: {
-              esModule: true,
-              hmr: process.env.NODE_ENV === 'development'
-            }
-          },
-          'css-loader'
-        ]
+module.exports = function getConfig(mode = 'production') {
+  return {
+    mode,
+    // devtool: 'source-map',
+    resolve: {
+      alias: {
+        '@': path.resolve(cmdPath, './src')
       }
-    ]
-  },
-  entry: entries(),
-  output,
-  plugins: getPlugins(),
-  watchOptions: {
-    poll: 1000, //监测修改的时间(ms)
-    aggregateTimeout: 500, //防止重复按键，500毫米内算按键一次
-    ignored: [/node_modules/, new RegExp(tempPath)]
+    },
+    module: {
+      rules: [
+        {
+          test: /\.vue$/,
+          // exclude: /node_modules/,
+          use: ['vue-loader']
+        },
+        {
+          test: /\.css$/,
+          // exclude: /node_modules/,
+          use: [
+            {
+              loader: MiniCssExtractPlugin.loader,
+              options: {
+                esModule: true,
+                hmr: process.env.NODE_ENV === 'development'
+              }
+            },
+            'css-loader'
+          ]
+        }
+      ]
+    },
+    entry: entries(),
+    output,
+    plugins: getPlugins(mode),
+    watchOptions: {
+      poll: 1000, //监测修改的时间(ms)
+      aggregateTimeout: 500, //防止重复按键，500毫米内算按键一次
+      ignored: [/node_modules/, new RegExp(tempPath)]
+    }
   }
 }
