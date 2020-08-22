@@ -86,17 +86,17 @@ class AppPlugin {
     this.writeFile(
       'app-service',
       'js',
-      `import appOptions from '../../src/app.js'
-    const pageCtx = require.context('../../src/pages', true, /\\.js$/)
-    const compCtx = require.context('../../src/components', true, /\\.js$/)
+      `import appOptions from '@/app.js'
+    const pageCtx = require.context('@/pages', true, /\\.js$/)
+    const compCtx = require.context('@/components', true, /\\.js$/)
     __$.serviceLoad({ pageCtx, compCtx, appOptions })`
     )
 
     this.writeFile(
       'config-service',
       'js',
-      `const pageCtx = require.context('../../src/pages', true, /\\.json$/)
-    import appJson from '../../src/app.json'
+      `const pageCtx = require.context('@/pages', true, /\\.json$/)
+    import appJson from '@/app.json'
 
     export function getPageCtx() {
       return pageCtx

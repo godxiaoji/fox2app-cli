@@ -144,6 +144,11 @@ const getPlugins = () => {
 module.exports = {
   mode: 'development',
   // devtool: 'source-map',
+  resolve: {
+    alias: {
+      '@': path.resolve(cmdPath, './src')
+    }
+  },
   module: {
     rules: [
       {
