@@ -1,4 +1,4 @@
-const fs = require('fs')
+const fse = require('fs-extra')
 const path = require('path')
 const { isObject } = require('util')
 
@@ -67,25 +67,27 @@ class AppPlugin {
     })
 
     compiler.hooks.afterEmit.tapAsync('AppPlugin', (compilation, callback) => {
-      // console.log(process.env.NODE_ENV)
       if (this.mode === 'production') {
         // 删除临时文件
-        this.deleteFolderRecursive(this.tempPath)
-      }
+        fse.remove(this.tempPath, err => {
+          if (err) return console.error(err)
 
-      callback()
+          console.log('D  ' + this.tempPath)
+          callback()
+        })
+      } else {
+        callback()
+      }
     })
   }
 
   createTempFiles() {
     // 创建临时处理目录
-    if (!fs.existsSync(this.tempPath)) {
-      fs.mkdirSync(this.tempPath)
-      console.log('A  ' + this.tempPath)
-    }
+    fse.ensureDirSync(this.tempPath)
+    console.log('A  ' + this.tempPath)
 
     // 服务层
-    this.writeFile(
+    this.writeCache(
       'app-service',
       'js',
       `import appOptions from '@/app.js'
@@ -94,7 +96,7 @@ class AppPlugin {
     __$.serviceLoad({ pageCtx, compCtx, appOptions })`
     )
 
-    this.writeFile(
+    this.writeCache(
       'config-service',
       'js',
       `const pageCtx = require.context('@/pages', true, /\\.json$/)
@@ -161,9 +163,9 @@ class AppPlugin {
         ')'
 
       const vueTpl = `<template>${htmlCont}</template><script>${jsCont}</script><style scoped>${cssCont}</style>`
-      const fileName = this.writeFile(page, 'vue', vueTpl)
+      const fileName = this.writeCache(page, 'vue', vueTpl)
       const jsTpl = `import App from './${fileName}.vue';new Vue({render: h => h(App)}).$mount('#app');`
-      this.writeFile(page, 'js', jsTpl)
+      this.writeCache(page, 'js', jsTpl)
     }
 
     const allRequireComponents = []
@@ -233,43 +235,7 @@ class AppPlugin {
         ')'
 
       const vueTpl = `<template>${htmlCont}</template><script>${jsCont}</script><style scoped>${cssCont}</style>`
-      this.writeFile(compPath, 'vue', vueTpl)
-    }
-  }
-
-  /**
-   * 删除文件夹
-   * @param {String} url
-   */
-  deleteFolderRecursive(url) {
-    let files = []
-    /**
-     * 判断给定的路径是否存在
-     */
-    if (fs.existsSync(url)) {
-      /**
-       * 返回文件和子目录的数组
-       */
-      files = fs.readdirSync(url)
-      files.forEach(file => {
-        const curPath = path.join(url, file)
-        /**
-         * fs.statSync同步读取文件夹文件，如果是文件夹，在重复触发函数
-         */
-        if (fs.statSync(curPath).isDirectory()) {
-          // recurse
-          this.deleteFolderRecursive(curPath)
-        } else {
-          fs.unlinkSync(curPath)
-        }
-      })
-      /**
-       * 清除文件夹
-       */
-      fs.rmdirSync(url)
-      console.log('D  ' + url)
-    } else {
-      console.log('给定的路径不存在，请给出正确的路径')
+      this.writeCache(compPath, 'vue', vueTpl)
     }
   }
 
@@ -279,22 +245,10 @@ class AppPlugin {
    * @param {String} ext
    * @param {String} content
    */
-  writeFile(page, ext, content) {
-    /*something*/
-    let pagePaths = page.split('/')
-    const fileName = pagePaths.pop()
+  writeCache(page, ext, content) {
+    const fileName = page.split('/').pop()
 
-    // 轮询创建文件
-    let _dir = this.tempPath
-    for (let i = 0; i < pagePaths.length; i++) {
-      _dir = _dir + '/' + pagePaths[i]
-
-      if (!fs.existsSync(_dir)) {
-        fs.mkdirSync(_dir)
-      }
-    }
-
-    fs.writeFileSync(`${_dir}/${fileName}.${ext}`, content)
+    fse.outputFileSync(path.resolve(this.tempPath, `${page}.${ext}`), content)
 
     return fileName
   }
@@ -320,20 +274,18 @@ class AppPlugin {
    */
   loadFileContent(filePath, ext) {
     if (ext === 'json') {
-      const ret = fs.existsSync(filePath)
-        ? fs.readFileSync(filePath).toString().trim()
-        : '{}'
-
       try {
-        return JSON.parse(ret)
+        return fse.readJsonSync(filePath)
       } catch (e) {
         return {}
       }
     }
 
-    return fs.existsSync(filePath)
-      ? fs.readFileSync(filePath).toString().trim()
-      : ''
+    try {
+      return fse.readFileSync(filePath).toString().trim()
+    } catch (error) {
+      return ''
+    }
   }
 }
 

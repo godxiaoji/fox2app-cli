@@ -23,12 +23,20 @@ program
   .description('Init new project.')
   .parse(process.argv)
   .action(name => {
+    name = name.split('.')[0] // 确保没有后缀
+
     if (fs.existsSync(name)) {
+      // 如果路径存在，判断下是否目录
       const stat = fs.lstatSync(name)
 
       if (stat.isDirectory()) {
-        echoError(`Folder "${path.resolve(name)}" already exists.`)
-        shell.exit(1)
+        // 如果存在目录，判断下目录是否为空
+        const files = fs.readdirSync(name)
+
+        if (files.length > 0) {
+          echoError(`Folder "${path.resolve(name)}" already exists and it. And it's a non empty folder.`)
+          shell.exit(1)
+        }
       }
     }
 
