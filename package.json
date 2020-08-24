@@ -1,7 +1,7 @@
 {
   "name": "fox2app-cli",
   "version": "0.0.2",
-  "description": "",
+  "description": "fox2app 脚手架",
   "main": "index.js",
   "scripts": {
     "lint": "eslint . --fix",
