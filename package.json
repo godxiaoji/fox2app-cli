@@ -1,6 +1,6 @@
 {
-  "name": "fox2app",
-  "version": "1.0.4",
+  "name": "fox2app-cli",
+  "version": "0.0.2",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -8,20 +8,20 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "bin": {
-    "fox2app-service": "./bin/service.js",
-    "fox2app": "./bin/cli.js"
+    "fox2app-cli-service": "./bin/fox2app-cli-service.js",
+    "fox2app": "./bin/fox2app.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/godxiaoji/fox2app.git"
+    "url": "git+https://github.com/godxiaoji/fox2app-cli.git"
   },
   "author": "Travis",
   "license": "MIT",
   "devDependencies": {},
   "bugs": {
-    "url": "https://github.com/godxiaoji/fox2app/issues"
+    "url": "https://github.com/godxiaoji/fox2app-cli/issues"
   },
-  "homepage": "https://github.com/godxiaoji/fox2app#readme",
+  "homepage": "https://github.com/godxiaoji/fox2app-cli#readme",
   "dependencies": {
     "fs-extra": "^9.0.1",
     "chalk": "^4.1.0",
