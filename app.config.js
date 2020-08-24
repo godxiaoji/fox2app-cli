@@ -1,4 +1,4 @@
-const fs = require('fs')
+const fse = require('fs-extra')
 const path = require('path')
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
@@ -8,10 +8,8 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 // const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 
-const cmdPath = './'
+const appData = fse.readJsonSync(path.resolve('./src/app.json'))
 const tempPath = path.resolve(__dirname, './cache')
-let appData = fs.readFileSync(path.resolve(cmdPath, './src/app.json'))
-appData = JSON.parse(appData)
 
 const entries = () => {
   const ret = {}
@@ -27,7 +25,7 @@ const entries = () => {
 }
 
 const output = {
-  path: path.resolve(cmdPath, './dist'),
+  path: path.resolve('./dist'),
   filename: '[name].js'
 }
 
@@ -98,11 +96,11 @@ const getPlugins = (mode) => {
     new CopyWebpackPlugin({
       patterns: [
         {
-          from: path.join(cmdPath, './src/app.json'),
+          from: path.join('./src/app.json'),
           to: path.join(output.path, './app.json')
         },
         {
-          from: path.join(cmdPath, './project.config.json'),
+          from: path.join('./project.config.json'),
           to: path.join(output.path, 'project.config.json')
         },
         {
@@ -147,7 +145,7 @@ module.exports = function getConfig(mode = 'production') {
     // devtool: 'source-map',
     resolve: {
       alias: {
-        '@': path.resolve(cmdPath, './src')
+        '@': path.resolve('./src')
       }
     },
     module: {
