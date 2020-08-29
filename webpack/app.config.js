@@ -1,25 +1,23 @@
 const fse = require('fs-extra')
 const path = require('path')
-const VueLoaderPlugin = require('vue-loader/lib/plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const AppPlugin = require('./app-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
-// const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 
 const appData = fse.readJsonSync(path.resolve('./src/app.json'))
-const tempPath = path.resolve(__dirname, './cache')
 
 const entries = () => {
   const ret = {}
 
+  // 处理页面和组件
   appData.pages.forEach(v => {
-    ret[v] = path.resolve(tempPath, `./${v}.js`)
+    ret[v] = path.resolve(`./src/${v}.fxml`)
   })
 
-  ret['app-service'] = path.resolve(tempPath, './app-service.js')
-  ret['config-service'] = path.resolve(tempPath, './config-service.js')
+  ret['app-service'] = path.resolve(__dirname, `../frame/app-service.js`)
+  ret['config-service'] = path.resolve(__dirname, `../frame/config-service.js`)
 
   return ret
 }
@@ -29,10 +27,10 @@ const output = {
   filename: '[name].js'
 }
 
-const getPlugins = (mode) => {
-  const ret = []
+const getPlugins = () => {
+  const ret = [new CleanWebpackPlugin()]
 
-  // 业务页面
+  // ui html
   appData.pages.forEach(v => {
     ret.push(
       new HtmlWebpackPlugin({
@@ -46,12 +44,12 @@ const getPlugins = (mode) => {
         chunks: [v], //每个html只引入对应的js和css
         inject: true,
         hash: false, //避免缓存js。
-        template: path.resolve(__dirname, './frame/page.html') //打包html模版的路径和文件名称
+        template: path.resolve(__dirname, '../frame/page.html') //打包html模版的路径和文件名称
       })
     )
   })
 
-  // 用户逻辑页面
+  // master html
   ret.push(
     new HtmlWebpackPlugin({
       filename: 'index.html',
@@ -63,11 +61,11 @@ const getPlugins = (mode) => {
       chunks: ['config-service'],
       inject: 'head',
       hash: false, //避免缓存js。
-      template: path.resolve(__dirname, './frame/index.html') //打包html模版的路径和文件名称
+      template: path.resolve(__dirname, '../frame/index.html') //打包html模版的路径和文件名称
     })
   )
 
-  // 用户逻辑页面
+  // logic html
   ret.push(
     new HtmlWebpackPlugin({
       filename: 'logic.html',
@@ -79,16 +77,7 @@ const getPlugins = (mode) => {
       chunks: ['app-service'],
       inject: true,
       hash: false, //避免缓存js。
-      template: path.resolve(__dirname, './frame/logic.html') //打包html模版的路径和文件名称
-    })
-  )
-
-  ret.push(
-    new AppPlugin({
-      src: 'src',
-      pages: appData.pages,
-      tempPath,
-      mode
+      template: path.resolve(__dirname, '../frame/logic.html') //打包html模版的路径和文件名称
     })
   )
 
@@ -96,15 +85,15 @@ const getPlugins = (mode) => {
     new CopyWebpackPlugin({
       patterns: [
         {
-          from: path.join('./src/app.json'),
+          from: path.resolve('./src/app.json'),
           to: path.join(output.path, './app.json')
         },
         {
-          from: path.join('./project.config.json'),
+          from: path.resolve('./project.config.json'),
           to: path.join(output.path, 'project.config.json')
         },
         {
-          from: path.join(__dirname, './frame/libs/'),
+          from: path.join(__dirname, '../frame/libs/'),
           to: path.join(output.path, './libs')
           // ignore: ["*.html"],
         }
@@ -134,15 +123,17 @@ const getPlugins = (mode) => {
     })
   )
 
-  ret.push(new VueLoaderPlugin())
-
   return ret
 }
 
 module.exports = function getConfig(mode = 'production') {
   return {
+    resolveLoader: {
+      // 去哪些目录下寻找 Loader，有先后顺序之分
+      modules: ['node_modules', './modules/']
+    },
     mode,
-    // devtool: 'source-map',
+    devtool: mode === 'development' ? 'inline-source-map' : false,
     resolve: {
       alias: {
         '@': path.resolve('./src')
@@ -151,13 +142,13 @@ module.exports = function getConfig(mode = 'production') {
     module: {
       rules: [
         {
-          test: /\.vue$/,
-          // exclude: /node_modules/,
-          use: ['vue-loader']
+          test: /\.fxml$/,
+          exclude: /node_modules/,
+          use: ['fox2app-loader']
         },
         {
           test: /\.css$/,
-          // exclude: /node_modules/,
+          exclude: /node_modules/,
           use: [
             {
               loader: MiniCssExtractPlugin.loader,
@@ -173,11 +164,6 @@ module.exports = function getConfig(mode = 'production') {
     },
     entry: entries(),
     output,
-    plugins: getPlugins(mode),
-    watchOptions: {
-      poll: 1000, //监测修改的时间(ms)
-      aggregateTimeout: 500, //防止重复按键，500毫米内算按键一次
-      ignored: [/node_modules/, new RegExp(tempPath)]
-    }
+    plugins: getPlugins(mode)
   }
 }

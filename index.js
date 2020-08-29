@@ -1,3 +1,3 @@
-const getConfig = require('./app.config')
+const getConfig = require('./webpack/app.config')
 
 module.exports = { getConfig }
