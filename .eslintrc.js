@@ -3,12 +3,11 @@ module.exports = {
   env: {
     node: true
   },
-  globals: {
-  },
+  globals: {},
   extends: ['eslint:recommended'],
   parserOptions: {
     ecmaVersion: 10,
-    sourceType: "module"
+    sourceType: 'module'
   },
   rules: {
     strict: 0,
@@ -16,9 +15,16 @@ module.exports = {
     semi: ['error', 'never'],
     'comma-dangle': ['error', 'never'],
     'array-bracket-spacing': ['error', 'never'],
-    'computed-property-spacing': ["error", "never"],
-    'object-curly-spacing': ["error", "always"],
-    'space-before-function-paren': ['error', 'never'],
+    'computed-property-spacing': ['error', 'never'],
+    'object-curly-spacing': ['error', 'always'],
+    'space-before-function-paren': [
+      'error',
+      {
+        anonymous: 'always',
+        named: 'never',
+        asyncArrow: 'never'
+      }
+    ],
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off'
   }
 }

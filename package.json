@@ -1,6 +1,6 @@
 {
   "name": "fox2app-cli",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "fox2app 脚手架",
   "main": "index.js",
   "scripts": {
@@ -23,10 +23,22 @@
   },
   "homepage": "https://github.com/godxiaoji/fox2app-cli#readme",
   "dependencies": {
-    "fs-extra": "^9.0.1",
     "chalk": "^4.1.0",
     "commander": "^6.0.0",
     "download-git-repo": "^3.0.2",
-    "shelljs": "^0.8.4"
+    "fs-extra": "^9.0.1",
+    "html-webpack-plugin": "^4.3.0",
+    "shelljs": "^0.8.4",
+    "clean-webpack-plugin": "^3.0.0",
+    "copy-webpack-plugin": "^6.0.3",
+    "css-loader": "^4.2.1",
+    "eslint": "^7.7.0",
+    "eslint-plugin-vue": "^6.2.2",
+    "fox2app-loader": "0.0.1",
+    "mini-css-extract-plugin": "^0.9.0",
+    "optimize-css-assets-webpack-plugin": "^5.0.3",
+    "webpack": "^4.44.1",
+    "webpack-cli": "^3.3.12",
+    "webpack-dev-server": "^3.11.0"
   }
 }

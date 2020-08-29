@@ -6,7 +6,7 @@ const program = require('commander')
 // const exec = require('child_process').exec
 const { version } = require('../package.json')
 const download = require('download-git-repo')
-const shell = require("shelljs")
+const shell = require('shelljs')
 
 function echoError(message) {
   console.log(chalk.red('Error: ' + message))
@@ -28,7 +28,11 @@ function createProject(name) {
       const files = fs.readdirSync(name)
 
       if (files.length > 0) {
-        echoError(`Folder "${path.resolve(name)}" already exists and it. And it's a non empty folder.`)
+        echoError(
+          `Folder "${path.resolve(
+            name
+          )}" already exists and it. And it's a non empty folder.`
+        )
         shell.exit(1)
       }
     }
@@ -46,7 +50,6 @@ function createProject(name) {
     'https://github.com:godxiaoji/fox2app-template#master',
     name,
     err => {
-
       try {
         if (err) throw err
 
@@ -54,19 +57,17 @@ function createProject(name) {
 
         shell.cd(name)
         shell.echo('Install dependencies.')
-        shell.exec("npm install --registry=https://registry.npm.taobao.org")
+        shell.exec('npm install --registry=https://registry.npm.taobao.org')
 
         echoSuccess('Install dependencies success.')
 
         shell.echo(chalk.blue(`\nYou should: cd ${name} & npm run serve`))
 
         shell.exit(0)
-
       } catch (err) {
         echoError(err.message)
         shell.exit(1)
       }
-
     }
   )
 }
@@ -75,10 +76,8 @@ program
   .version(version)
   .command('create <app-name>')
   // .command('create <app-name> [options...]')
-  .action(function(appName) {
+  .action(function (appName) {
     createProject(appName)
   })
 
-
 program.parse(process.argv)
-
