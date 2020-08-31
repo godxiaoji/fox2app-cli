@@ -54,4 +54,8 @@ npm run build
 
 ### 文档
 
-[Components & APIs](./doc/README.md)
+[Guide 指南](./doc/README.GUIDE.md)
+
+[Components 组件](./doc/README.COMPONENTS.md)
+
+[APIs 接口](./doc/README.APIS.md)
