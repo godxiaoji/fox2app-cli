@@ -54,7 +54,7 @@ npm run build
 
 ### 文档
 
-[Guide 指南](./doc/README.GUIDE.md)
+[Guide 指南](./doc/README.md)
 
 [Components 组件](./doc/README.COMPONENTS.md)
 
