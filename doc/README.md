@@ -184,10 +184,7 @@ export default {
   },
   methods: {
     add() {
-      this.setData({
-        number: this.data.number + 1,
-        'info.num': this.data.info.num + 2
-      })
+      this.number++
     },
     back() {
       fx.switchTab({
@@ -198,4 +195,4 @@ export default {
 }
 ```
 
-PS：时间关系，这里要注意的是，`computed`，`watch`目前还未做适配，提供了一个 `this.setData` 方法来做修改数据，功能同微应用。
+PS：目前`data`，生命周期，`methods`，`computed`，`watch`目前已经做了适配，其他的暂未调试，不能保证正常使用。
