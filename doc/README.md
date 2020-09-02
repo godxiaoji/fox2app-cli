@@ -196,3 +196,32 @@ export default {
 ```
 
 PS：目前`data`，生命周期，`methods`，`computed`，`watch`目前已经做了适配，其他的暂未调试，不能保证正常使用。
+
+#### 表单输入绑定
+
+暂不支持 `v-model` 指令，目前不支持双向绑定，可以用 input，change 等事件的 event.details.value 获取。
+
+推荐使用封装好的 [表单组件](./README.COMPONENTS.md#表单组件)。
+
+#### 事件处理
+
+1. 不支持 DOM 事件绑定中直接写 JavaScript 指令代码：
+
+```
+<!-- 不支持 -->
+<div id="example-1">
+  <button v-on:click="counter += 1">Add 1</button>
+  <p>The button above has been clicked {{ counter }} times.</p>
+</div>
+```
+
+2. 不支持 DragEvent 相关的事件：
+
+- dragstart
+- drag
+- dragenter
+- dragexit
+- dragleave
+- dragover
+- drop
+- dragend

@@ -8,7 +8,7 @@
 <fx-scroll-view :scroll-y="true"></fx-scroll-view>
 ```
 
-## BASE
+## <a name="基础组件">基础组件</a>
 
 [ScrollView](./components/README.ScrollView.md)
 
@@ -18,7 +18,7 @@
 
 [Icon](./components/README.Icon.md)
 
-## FORM
+## <a name="表单组件">表单组件</a>
 
 [Form](./components/README.Form.md)
 
@@ -44,15 +44,15 @@
 
 [Switch](./components/README.Switch.md)
 
-## Navigation
+## <a name="导航组件">导航组件</a>
 
 [BackToTop](./components/README.BackToTop.md)
 
-## MEDIA
+## <a name="媒体组件">媒体组件</a>
 
 [Image](./components/README.Image.md)
 
-## TIPS
+## <a name="提示组件">提示组件</a>
 
 [Toast](./components/README.Toast.md)
 

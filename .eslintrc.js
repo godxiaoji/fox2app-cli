@@ -17,14 +17,7 @@ module.exports = {
     'array-bracket-spacing': ['error', 'never'],
     'computed-property-spacing': ['error', 'never'],
     'object-curly-spacing': ['error', 'always'],
-    'space-before-function-paren': [
-      'error',
-      {
-        anonymous: 'always',
-        named: 'never',
-        asyncArrow: 'never'
-      }
-    ],
+    'space-before-function-paren': ['error', 'never'],
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off'
   }
 }
