@@ -27,8 +27,12 @@ const output = {
   filename: '[name].js'
 }
 
-const getPlugins = () => {
-  const ret = [new CleanWebpackPlugin()]
+const getPlugins = mode => {
+  const ret = []
+
+  if (mode === 'production') {
+    ret.push(new CleanWebpackPlugin())
+  }
 
   // ui html
   appData.pages.forEach(v => {

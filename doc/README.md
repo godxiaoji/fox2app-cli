@@ -160,10 +160,6 @@ PS：页面或者组件中引入的其他自定义组件需要在该文件中体
 
 和 vue-cli 生成的模板 script 中使用方式相同。
 
-生命周期扩展了两个类 `onShow` 和 `onHide`，当前不支持引入 vuex 和 vue-roader 等官方组件。
-
-引用自定义组件是在 json 配置中写好的，在 js 中不需要重复引入，`components` 配置不需要提供也不支持这种方式。
-
 ```
 export default {
   data() {
@@ -195,7 +191,13 @@ export default {
 }
 ```
 
-PS：目前`data`，生命周期，`methods`，`computed`，`watch`目前已经做了适配，其他的暂未调试，不能保证正常使用。
+1. 这份配置会在 UI 层生产 vue 实例，UI 层的方法，生命周期等都会劫持转发到 logic 层。也会在 logic 层生成一份相似的 fx 实例。
+
+2. 生命周期扩展了两个类 `onShow` 和 `onHide`，目前 app 的 show 和 hide 需要宿主来完成。
+
+3. 由于采用内嵌 iframe 多页面的方式，不支持引入 `vue-roader`。
+
+4. 目前`data`，生命周期，`methods`，`computed`，`watch`目前已经做了适配，其他的暂未调试，不能保证正常使用。
 
 #### 表单输入绑定
 
@@ -225,3 +227,23 @@ PS：目前`data`，生命周期，`methods`，`computed`，`watch`目前已经�
 - dragover
 - drop
 - dragend
+
+#### 组件相关
+
+1. 引用自定义组件是在对应 json 配置中写好的，在 js 中不需要重复 import，`components` 配置不需要提供也不支持这种方式。
+
+2. 支持 ref
+
+可以通过 ref 这个 attribute 为子组件赋予一个 ID 引用。例如：
+
+```
+<base-input ref="usernameInput"></base-input>
+```
+
+现在在你已经定义了这个 ref 的组件里，你可以使用：
+
+```
+this.\$refs.usernameInput
+```
+
+获取到 fx 实例。
