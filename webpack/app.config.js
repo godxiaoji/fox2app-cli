@@ -5,6 +5,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+const AppPlugin = require('fox2app-loader/plugins')
 
 const appData = fse.readJsonSync(path.resolve('./src/app.json'))
 
@@ -33,6 +34,12 @@ const getPlugins = mode => {
   if (mode === 'production') {
     ret.push(new CleanWebpackPlugin())
   }
+
+  ret.push(
+    new AppPlugin({
+      mode
+    })
+  )
 
   // ui html
   appData.pages.forEach(v => {
@@ -132,10 +139,6 @@ const getPlugins = mode => {
 
 module.exports = function getConfig(mode = 'production') {
   return {
-    resolveLoader: {
-      // 去哪些目录下寻找 Loader，有先后顺序之分
-      modules: ['node_modules', './modules/']
-    },
     mode,
     devtool: mode === 'development' ? 'inline-source-map' : false,
     resolve: {
