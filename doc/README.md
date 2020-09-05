@@ -148,7 +148,7 @@ PS：页面或者组件中引入的其他自定义组件需要在该文件中体
 
 ### <a name="page.json">fxml 模板</a>
 
-整个框架基于 VUE 作为 UI 层的开发，所以模板也沿用了 vue 的模板引擎，具体语法可以参考[VUE 模板语法](https://cn.vuejs.org/v2/guide/syntax.html)。
+整个框架基于 VUE 作为 UI 层的开发，所以模板也沿用了 Vue 的模板引擎，具体语法可以参考[Vue 模板语法](https://cn.vuejs.org/v2/guide/syntax.html)。
 
 ### <a name="page.css">css 样式</a>
 
@@ -191,21 +191,29 @@ export default {
 }
 ```
 
-1. 这份配置会在 UI 层生产 vue 实例，UI 层的方法，生命周期等都会劫持转发到 logic 层。也会在 logic 层生成一份相似的 fx 实例。
+## 基础
 
-2. 生命周期扩展了两个类 `onShow` 和 `onHide`，目前 app 的 show 和 hide 需要宿主来完成。
+体验该框架默认你比较熟悉 Vue，里面很多语法和功能都和 Vue 比较类似。和 Vue 不同的时候，禁止了所有 DOM 相关的操作，而且像 window，location 等对象也被禁止。
 
-3. 由于采用内嵌 iframe 多页面的方式，不支持引入 `vue-roader`。
+### 实例
 
-4. 目前`data`，生命周期，`methods`，`computed`，`watch`目前已经做了适配，其他的暂未调试，不能保证正常使用。
+1. 这份配置会在 UI 层生产 Vue 实例，UI 层的方法，生命周期等都会劫持转发到 logic 层。也会在 logic 层生成一份相似的 Fx 实例。
 
-#### 表单输入绑定
+2. 同 Vue 一样，Fx 实例的 data 也是响应式的，内部用 [Proxy](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Proxy) 来实现，并传输到 UI 层。UI 采用 Vue 2.x，使用 Object.defineProperty 来响应，感兴趣查看[Vue 深入响应式原理](https://cn.vuejs.org/v2/guide/reactivity.html)。
 
-暂不支持 `v-model` 指令，目前不支持双向绑定，可以用 input，change 等事件的 event.details.value 获取。
+3. 不同于 Vue，data 的值不能有函数。
 
-推荐使用封装好的 [表单组件](./README.COMPONENTS.md#表单组件)。
+4. 生命周期扩展了两个类 `onShow` 和 `onHide`，目前 app 的 show 和 hide 需要宿主来实现。
 
-#### 事件处理
+### 模板语法
+
+模板沿用了 Vue 的模板引擎，具体语法可以参考[Vue 模板语法](https://cn.vuejs.org/v2/guide/syntax.html)。
+
+### 计算属性和侦听器
+
+已经实现了完整的 computed 和 watch，具体用法可参考 [Vue 计算属性和侦听器](https://cn.vuejs.org/v2/guide/computed.html)。
+
+### 事件处理
 
 1. 不支持 DOM 事件绑定中直接写 JavaScript 指令代码：
 
@@ -228,7 +236,13 @@ export default {
 - drop
 - dragend
 
-#### 组件相关
+### 表单输入绑定
+
+暂不支持 `v-model` 指令，目前不支持双向绑定，可以用 input，change 等事件的 event.details.value 获取。
+
+推荐使用封装好的 [表单组件](./README.COMPONENTS.md#表单组件)。
+
+### 组件相关
 
 1. 引用自定义组件是在对应 json 配置中写好的，在 js 中不需要重复 import，`components` 配置不需要提供也不支持这种方式。
 
@@ -247,3 +261,9 @@ this.\$refs.usernameInput
 ```
 
 获取到 fx 实例。
+
+### 规模化
+
+1. 框架内部实现了跟 APP 一样的多页模式，不支持引入 `vue-roader`。
+
+2. `vuex`暂未支持。
