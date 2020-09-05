@@ -262,6 +262,55 @@ this.\$refs.usernameInput
 
 获取到 fx 实例。
 
+### 过滤器
+
+1. 在组件中支持创建一个本地过滤器：
+
+```
+// eg: page/index/index.js
+
+filters: {
+  capitalize: function (value) {
+    if (!value) return ''
+    value = value.toString()
+    return value.charAt(0).toUpperCase() + value.slice(1)
+  }
+}
+```
+
+2. 或者在 app.js 中创建全局过滤器
+
+```
+// app.js
+...
+
+globalData: {},
+filters: {
+  ucfirst(value) {
+    if (!value) return ''
+    value = value.toString()
+    return value.charAt(0).toUpperCase() + value.slice(1)
+  }
+},
+
+...
+```
+
+3. 跟 Vue 一样，过滤器也支持以下三种情况：
+
+- 当全局过滤器和局部过滤器重名时，会采用局部过滤器。
+- 串：
+
+```
+{{ message | filterA | filterB }}
+```
+
+- 接收参数：
+
+```
+{{ message | filterA('arg1', arg2) }}
+```
+
 ### 规模化
 
 1. 框架内部实现了跟 APP 一样的多页模式，不支持引入 `vue-roader`。

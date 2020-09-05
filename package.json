@@ -1,6 +1,6 @@
 {
   "name": "fox2app-cli",
-  "version": "0.0.11",
+  "version": "0.0.12",
   "description": "fox2app 脚手架",
   "main": "index.js",
   "scripts": {
