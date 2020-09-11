@@ -215,7 +215,7 @@ export default {
 
 ### 事件处理
 
-1. 不支持 DOM 事件绑定中直接写 JavaScript 指令代码：
+1. 不支持 DOM 事件绑定中直接写表达式，只能通过传递函数的方式：
 
 ```
 <!-- 不支持 -->
@@ -238,9 +238,7 @@ export default {
 
 ### 表单输入绑定
 
-暂不支持 `v-model` 指令，目前不支持双向绑定，可以用 input，change 等事件的 event.details.value 获取。
-
-推荐使用封装好的 [表单组件](./README.COMPONENTS.md#表单组件)。
+支持 `v-model` 指令，目前该指令不能针对自定义组件。
 
 ### 组件相关
 
@@ -286,7 +284,7 @@ filters: {
 
 globalData: {},
 filters: {
-  ucfirst(value) {
+  capitalize(value) {
     if (!value) return ''
     value = value.toString()
     return value.charAt(0).toUpperCase() + value.slice(1)
