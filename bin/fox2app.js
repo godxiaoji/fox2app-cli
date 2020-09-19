@@ -76,7 +76,7 @@ program
   .version(version)
   .command('create <app-name>')
   // .command('create <app-name> [options...]')
-  .action(function (appName) {
+  .action(function(appName) {
     createProject(appName)
   })
 

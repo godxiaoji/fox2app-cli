@@ -314,3 +314,5 @@ filters: {
 1. 框架内部实现了跟 APP 一样的多页模式，不支持引入 `vue-roader`。
 
 2. `vuex`暂未支持。
+
+3. 内置 `axios` 。

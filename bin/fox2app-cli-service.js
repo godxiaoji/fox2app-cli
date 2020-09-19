@@ -25,23 +25,23 @@ function getConfigPath(configFileName) {
 
 program.version(version)
 
-program.command('lint').action(function () {
+program.command('lint').action(function() {
   shell.exec(`eslint . --fix`)
   echoSuccess('The eslint done.')
 })
 
-program.command('build').action(function () {
+program.command('build').action(function() {
   shell.exec(
     `webpack --mode=production --config=${getConfigPath('prod.config.js')}`
   )
 })
 
-program.command('serve').action(function () {
+program.command('serve').action(function() {
   shell.exec(
     `webpack-dev-server --mode=development --config=${getConfigPath(
       'dev.config.js'
     )}`,
-    function (code, stdout, stderr) {
+    function(code, stdout, stderr) {
       if (stderr) {
         echoError(stderr)
       }
