@@ -17,7 +17,9 @@
   },
   "author": "Travis",
   "license": "MIT",
-  "devDependencies": {},
+  "devDependencies": {
+    "cz-conventional-changelog": "^3.3.0"
+  },
   "bugs": {
     "url": "https://github.com/godxiaoji/fox2app-cli/issues"
   },
@@ -46,5 +48,10 @@
     "webpack": "^4.44.1",
     "webpack-cli": "^3.3.12",
     "webpack-dev-server": "^3.11.0"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
   }
 }
